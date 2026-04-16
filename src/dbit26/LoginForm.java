@@ -117,6 +117,7 @@ public class LoginForm extends javax.swing.JFrame {
 
         jButton1.setFont(new java.awt.Font("Serif", 0, 14)); // NOI18N
         jButton1.setText("Login");
+        jButton1.addActionListener(this::jButton1ActionPerformed);
 
         jButton2.setFont(new java.awt.Font("Serif", 0, 14)); // NOI18N
         jButton2.setText("Register");
@@ -185,6 +186,10 @@ public class LoginForm extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
