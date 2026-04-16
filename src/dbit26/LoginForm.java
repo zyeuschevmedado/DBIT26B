@@ -4,8 +4,12 @@
  */
 package dbit26;
 
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import javax.swing.JOptionPane;
+
 
 /**
  *
@@ -44,9 +48,9 @@ public class LoginForm extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         EM = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jPasswordField1 = new javax.swing.JPasswordField();
+        ps = new javax.swing.JPasswordField();
         jPanel1 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        jbtlog = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
 
@@ -78,8 +82,8 @@ public class LoginForm extends javax.swing.JFrame {
         jLabel2.setText("Password:");
         jLabel2.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        jPasswordField1.setFont(new java.awt.Font("Serif", 0, 18)); // NOI18N
-        jPasswordField1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Pass", javax.swing.border.TitledBorder.TRAILING, javax.swing.border.TitledBorder.TOP));
+        ps.setFont(new java.awt.Font("Serif", 0, 18)); // NOI18N
+        ps.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Pass", javax.swing.border.TitledBorder.TRAILING, javax.swing.border.TitledBorder.TOP));
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -96,7 +100,7 @@ public class LoginForm extends javax.swing.JFrame {
                         .addGap(18, 18, 18)))
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(EM)
-                    .addComponent(jPasswordField1, javax.swing.GroupLayout.DEFAULT_SIZE, 195, Short.MAX_VALUE))
+                    .addComponent(ps, javax.swing.GroupLayout.DEFAULT_SIZE, 195, Short.MAX_VALUE))
                 .addGap(25, 25, 25))
         );
         jPanel3Layout.setVerticalGroup(
@@ -108,16 +112,16 @@ public class LoginForm extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(ps, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(36, Short.MAX_VALUE))
         );
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jButton1.setFont(new java.awt.Font("Serif", 0, 14)); // NOI18N
-        jButton1.setText("Login");
-        jButton1.addActionListener(this::jButton1ActionPerformed);
+        jbtlog.setFont(new java.awt.Font("Serif", 0, 14)); // NOI18N
+        jbtlog.setText("Login");
+        jbtlog.addActionListener(this::jbtlogActionPerformed);
 
         jButton2.setFont(new java.awt.Font("Serif", 0, 14)); // NOI18N
         jButton2.setText("Register");
@@ -132,7 +136,7 @@ public class LoginForm extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(36, 36, 36)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jbtlog, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -144,7 +148,7 @@ public class LoginForm extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
+                    .addComponent(jbtlog)
                     .addComponent(jButton2)
                     .addComponent(jButton3))
                 .addContainerGap(10, Short.MAX_VALUE))
@@ -187,9 +191,58 @@ public class LoginForm extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jbtlogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtlogActionPerformed
     
-    }//GEN-LAST:event_jButton1ActionPerformed
+        DashBoard dash = new DashBoard();
+        Connection conn = (Connection) DBConnection.getConnection();
+        
+        
+           try {
+
+        String sql = "SELECT * FROM users WHERE email=? AND password=?";
+        PreparedStatement pst = conn.prepareStatement(sql);
+
+        String email = EM.getText();
+        String pass = new String(ps.getPassword());
+
+        pst.setString(1, email);
+        pst.setString(2, pass);
+
+        ResultSet rs = pst.executeQuery();
+
+        if (rs.next()) {
+
+            int userId = rs.getInt("id"); // ✅ matches your users table
+
+            int confirm = JOptionPane.showConfirmDialog(
+                    null,
+                    "Are you sure you want to login?",
+                    "Login",
+                    JOptionPane.YES_NO_OPTION
+            );
+
+            if (confirm == JOptionPane.YES_OPTION) {
+
+                // ✅ LOGIN LOGS (MATCHED TO YOUR TABLE)
+                String logSql = "INSERT INTO login_logs(user_id) VALUES (?)";
+                PreparedStatement logPst = conn.prepareStatement(logSql);
+                logPst.setInt(1, userId);
+                logPst.executeUpdate();
+                logPst.close();
+
+                dash.setVisible(true);
+                dispose();
+            }
+
+        } else {
+            JOptionPane.showMessageDialog(null, "INCORRECT CREDENTIALS");
+        }
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
+    }
+        
+    }//GEN-LAST:event_jbtlogActionPerformed
 
     /**
      * @param args the command line arguments
@@ -218,13 +271,13 @@ public class LoginForm extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField EM;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPasswordField jPasswordField1;
+    private javax.swing.JButton jbtlog;
+    private javax.swing.JPasswordField ps;
     // End of variables declaration//GEN-END:variables
 }
