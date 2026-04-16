@@ -4,35 +4,23 @@
  */
 package dbit26;
 
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import javax.swing.JOptionPane;
-
 
 /**
  *
  * @author User
  */
 public class LoginForm extends javax.swing.JFrame {
-    
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(LoginForm.class.getName());
 
-    
-     
-    
-    
-    
     /**
      * Creates new form LoginForm
      */
     public LoginForm() {
         initComponents();
-        
-        
-         
-        
+
     }
 
     /**
@@ -188,60 +176,61 @@ public class LoginForm extends javax.swing.JFrame {
     }//GEN-LAST:event_EMActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+        RegisterForm reg = new RegisterForm();
+        reg.setVisible(true);
+
+        this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jbtlogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtlogActionPerformed
-    
+
         DashBoard dash = new DashBoard();
         Connection conn = (Connection) DBConnection.getConnection();
-        
-        
-           try {
 
-        String sql = "SELECT * FROM users WHERE email=? AND password=?";
-        PreparedStatement pst = conn.prepareStatement(sql);
+        try {
 
-        String email = EM.getText();
-        String pass = new String(ps.getPassword());
+            String sql = "SELECT * FROM users WHERE email=? AND password=?";
+            PreparedStatement pst = conn.prepareStatement(sql);
 
-        pst.setString(1, email);
-        pst.setString(2, pass);
+            String email = EM.getText();
+            String pass = new String(ps.getPassword());
 
-        ResultSet rs = pst.executeQuery();
+            pst.setString(1, email);
+            pst.setString(2, pass);
 
-        if (rs.next()) {
+            ResultSet rs = pst.executeQuery();
 
-            int userId = rs.getInt("id"); // ✅ matches your users table
+            if (rs.next()) {
 
-            int confirm = JOptionPane.showConfirmDialog(
-                    null,
-                    "Are you sure you want to login?",
-                    "Login",
-                    JOptionPane.YES_NO_OPTION
-            );
+                int userId = rs.getInt("id");
 
-            if (confirm == JOptionPane.YES_OPTION) {
+                int confirm = JOptionPane.showConfirmDialog(
+                        null,
+                        "Are you sure you want to login?",
+                        "Login",
+                        JOptionPane.YES_NO_OPTION
+                );
 
-                // ✅ LOGIN LOGS (MATCHED TO YOUR TABLE)
-                String logSql = "INSERT INTO login_logs(user_id) VALUES (?)";
-                PreparedStatement logPst = conn.prepareStatement(logSql);
-                logPst.setInt(1, userId);
-                logPst.executeUpdate();
-                logPst.close();
+                if (confirm == JOptionPane.YES_OPTION) {
 
-                dash.setVisible(true);
-                dispose();
+                    String logSql = "INSERT INTO login_logs(user_id) VALUES (?)";
+                    PreparedStatement logPst = conn.prepareStatement(logSql);
+                    logPst.setInt(1, userId);
+                    logPst.executeUpdate();
+                    logPst.close();
+
+                    dash.setVisible(true);
+                    dispose();
+                }
+
+            } else {
+                JOptionPane.showMessageDialog(null, "INCORRECT CREDENTIALS");
             }
 
-        } else {
-            JOptionPane.showMessageDialog(null, "INCORRECT CREDENTIALS");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
         }
 
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
-    }
-        
     }//GEN-LAST:event_jbtlogActionPerformed
 
     /**
