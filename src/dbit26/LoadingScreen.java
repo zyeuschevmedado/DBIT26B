@@ -7,23 +7,20 @@ public class LoadingScreen extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(LoadingScreen.class.getName());
 
     public LoadingScreen() {
-           setUndecorated(true);
+        setUndecorated(true);
         initComponents();
-     
 
-       
-    addComponentListener(new java.awt.event.ComponentAdapter() {
-        @Override
-        public void componentResized(java.awt.event.ComponentEvent e) {
-            setShape(new RoundRectangle2D.Double(
-                0, 0,
-                getWidth(),
-                getHeight(),
-                30, 30
-            ));
-        }
-    });
-
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            @Override
+            public void componentResized(java.awt.event.ComponentEvent e) {
+                setShape(new RoundRectangle2D.Double(
+                        0, 0,
+                        getWidth(),
+                        getHeight(),
+                        30, 30
+                ));
+            }
+        });
 
     }
 
@@ -32,7 +29,7 @@ public class LoadingScreen extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        ld = new javax.swing.JLabel();
         loadbar = new javax.swing.JProgressBar();
         jLabel4 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -44,10 +41,10 @@ public class LoadingScreen extends javax.swing.JFrame {
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
-        jLabel1.setFont(new java.awt.Font("Showcard Gothic", 1, 48)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(102, 102, 102));
-        jLabel1.setText("%");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 190, -1, -1));
+        ld.setFont(new java.awt.Font("Showcard Gothic", 1, 48)); // NOI18N
+        ld.setForeground(new java.awt.Color(102, 102, 102));
+        ld.setText("%");
+        getContentPane().add(ld, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 190, -1, -1));
         getContentPane().add(loadbar, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 110, 240, 60));
 
         jLabel4.setFont(new java.awt.Font("Showcard Gothic", 1, 48)); // NOI18N
@@ -55,53 +52,73 @@ public class LoadingScreen extends javax.swing.JFrame {
         jLabel4.setText("LOADING");
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 40, -1, -1));
 
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/login_it26b/0c667f05d3f74d182d2d3577652381c8.gif"))); // NOI18N
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/dbit26/0c667f05d3f74d182d2d3577652381c8.gif"))); // NOI18N
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 540, 290));
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    public static void main(String args[]) {
+        public static void main(String args[]) {
 
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+            //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+            /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
+             */
+            try {
+                for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                    if ("Nimbus".equals(info.getName())) {
+                        javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                        break;
+                    }
                 }
+            } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
+                logger.log(java.util.logging.Level.SEVERE, null, ex);
             }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
+            //</editor-fold>
+
+    
+            java.awt.EventQueue.invokeLater(() -> {
+                LoadingScreen ls = new LoadingScreen();
+                ls.setVisible(true);
+
+                
+                ls.setShape(new RoundRectangle2D.Double(
+                        0, 0,
+                        ls.getWidth(),
+                        ls.getHeight(),
+                        30, 30
+                ));
+
+                javax.swing.Timer timer = new javax.swing.Timer(50, null);
+
+                timer.addActionListener(e -> {
+                    int value = ls.loadbar.getValue();
+
+                    if (value < 100) {
+                        value++;
+                        ls.loadbar.setValue(value);
+                        ls.ld.setText(value + "%");
+                    } else {
+                        timer.stop();
+                        ls.dispose();
+
+                        LoginForm lr = new LoginForm();
+                        lr.setVisible(true);
+                    }
+                });
+
+                timer.start();
+
+            }
+            );
         }
-        //</editor-fold>
-
-        java.awt.EventQueue.invokeLater(() -> new LoadingScreen().setVisible(true));
-        
-        
-        java.awt.EventQueue.invokeLater(() -> {
-    LoadingScreen ls = new LoadingScreen();
-    ls.setVisible(true);
-
-    // apply shape AFTER visible
-    ls.setShape(new RoundRectangle2D.Double(
-        0, 0,
-        ls.getWidth(),
-        ls.getHeight(),
-        30, 30
-    ));
-});
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel ld;
     private javax.swing.JProgressBar loadbar;
     // End of variables declaration//GEN-END:variables
 }
