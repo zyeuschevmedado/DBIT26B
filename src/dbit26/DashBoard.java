@@ -19,16 +19,23 @@ public class DashBoard extends javax.swing.JFrame {
      */
     public DashBoard() {
         initComponents();
-         centerTable();
         loadTable();
+        centerTable();
 
         jtable1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
+
                 int row = jtable1.getSelectedRow();
 
-                name1.setText(jtable1.getValueAt(row, 1).toString());
-                ln.setText(jtable1.getValueAt(row, 2).toString());
-                em.setText(jtable1.getValueAt(row, 3).toString());
+                Object name = jtable1.getValueAt(row, 1);
+                Object lname = jtable1.getValueAt(row, 2);
+                Object email = jtable1.getValueAt(row, 3);
+                Object password = jtable1.getValueAt(row, 4);
+
+                name1.setText(name != null ? name.toString() : "");
+                ln.setText(lname != null ? lname.toString() : "");
+                em.setText(email != null ? email.toString() : "");
+                pss.setText(password != null ? password.toString() : "");
             }
         });
     }
@@ -52,7 +59,7 @@ public class DashBoard extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         em = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        pss = new javax.swing.JTextField();
+        pss = new javax.swing.JPasswordField();
         reg = new javax.swing.JButton();
         Edit = new javax.swing.JButton();
         del = new javax.swing.JButton();
@@ -60,6 +67,7 @@ public class DashBoard extends javax.swing.JFrame {
         jtable1 = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("DashBoard");
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "DASHBOARD", javax.swing.border.TitledBorder.TRAILING, javax.swing.border.TitledBorder.TOP));
 
@@ -85,8 +93,6 @@ public class DashBoard extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Serif", 0, 14)); // NOI18N
         jLabel4.setText("Password:");
 
-        pss.setFont(new java.awt.Font("Serif", 0, 14)); // NOI18N
-
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -95,21 +101,21 @@ public class DashBoard extends javax.swing.JFrame {
                 .addGap(41, 41, 41)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(pss, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(em, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 108, Short.MAX_VALUE)
                         .addComponent(ln, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(name1, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(name1, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(em)
+                            .addComponent(pss, javax.swing.GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE))))
                 .addGap(31, 31, 31))
         );
         jPanel3Layout.setVerticalGroup(
@@ -131,7 +137,7 @@ public class DashBoard extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(pss, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(7, Short.MAX_VALUE))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         reg.setText("ADD");
@@ -382,11 +388,9 @@ public class DashBoard extends javax.swing.JFrame {
             java.sql.Connection conn = java.sql.DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/THEALOGS", "root", ""
             );
-
-            String sql = "SELECT u.id, d.firstname, d.lastname, u.email "
+            String sql = "SELECT u.id, d.firstname, d.lastname, u.email, u.password "
                     + "FROM users u "
                     + "JOIN user_details d ON u.id = d.user_id";
-
             java.sql.PreparedStatement pst = conn.prepareStatement(sql);
             java.sql.ResultSet rs = pst.executeQuery();
 
@@ -400,7 +404,8 @@ public class DashBoard extends javax.swing.JFrame {
                     rs.getInt("id"),
                     rs.getString("firstname"),
                     rs.getString("lastname"),
-                    rs.getString("email")
+                    rs.getString("email"),
+                    "*****" // 🔒 hidden password
                 });
             }
 
@@ -458,7 +463,7 @@ public class DashBoard extends javax.swing.JFrame {
     private javax.swing.JTable jtable1;
     private javax.swing.JTextField ln;
     private javax.swing.JTextField name1;
-    private javax.swing.JTextField pss;
+    private javax.swing.JPasswordField pss;
     private javax.swing.JButton reg;
     // End of variables declaration//GEN-END:variables
 }
