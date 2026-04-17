@@ -1,14 +1,11 @@
-
 package dbit26;
 
 import javax.swing.table.DefaultTableCellRenderer;
-
 
 public class DashBoard extends javax.swing.JFrame {
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(DashBoard.class.getName());
 
-    
     public DashBoard() {
         initComponents();
         loadTable();
@@ -32,7 +29,6 @@ public class DashBoard extends javax.swing.JFrame {
         });
     }
 
-    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -200,6 +196,7 @@ public class DashBoard extends javax.swing.JFrame {
         );
 
         jButton1.setText("Log-out");
+        jButton1.addActionListener(this::jButton1ActionPerformed);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -244,7 +241,6 @@ public class DashBoard extends javax.swing.JFrame {
             String mail = em.getText().trim();
             String pass = pss.getText().trim();
 
-            
             if (fname.isEmpty() || lname.isEmpty() || mail.isEmpty() || pass.isEmpty()) {
                 javax.swing.JOptionPane.showMessageDialog(this, "Please fill all fields!");
                 return; // STOP execution
@@ -254,7 +250,6 @@ public class DashBoard extends javax.swing.JFrame {
                     "jdbc:mysql://localhost:3306/THEALOGS", "root", ""
             );
 
-            
             String sql1 = "INSERT INTO users(email, password) VALUES (?, ?)";
             java.sql.PreparedStatement pst1 = conn.prepareStatement(sql1, java.sql.Statement.RETURN_GENERATED_KEYS);
 
@@ -269,7 +264,6 @@ public class DashBoard extends javax.swing.JFrame {
                 userId = rs.getInt(1);
             }
 
-            
             String sql2 = "INSERT INTO user_details(user_id, firstname, lastname) VALUES (?, ?, ?)";
             java.sql.PreparedStatement pst2 = conn.prepareStatement(sql2);
 
@@ -280,10 +274,8 @@ public class DashBoard extends javax.swing.JFrame {
 
             javax.swing.JOptionPane.showMessageDialog(this, "Added Successfully!");
 
-            
             loadTable();
 
-            
             name1.setText("");
             ln.setText("");
             em.setText("");
@@ -298,7 +290,6 @@ public class DashBoard extends javax.swing.JFrame {
         try {
             int row = jtable1.getSelectedRow();
 
-            
             if (row == -1) {
                 javax.swing.JOptionPane.showMessageDialog(this, "Please select a record first!");
                 return;
@@ -350,7 +341,6 @@ public class DashBoard extends javax.swing.JFrame {
                     "jdbc:mysql://localhost:3306/THEALOGS", "root", ""
             );
 
-            
             String sql1 = "DELETE FROM user_details WHERE user_id=?";
             java.sql.PreparedStatement pst1 = conn.prepareStatement(sql1);
             pst1.setInt(1, id);
@@ -363,10 +353,8 @@ public class DashBoard extends javax.swing.JFrame {
 
             javax.swing.JOptionPane.showMessageDialog(this, "Deleted Successfully!");
 
-            
             loadTable();
 
-            
             name1.setText("");
             ln.setText("");
             em.setText("");
@@ -376,6 +364,20 @@ public class DashBoard extends javax.swing.JFrame {
             javax.swing.JOptionPane.showMessageDialog(this, e);
         }
     }//GEN-LAST:event_delActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        int confirm = javax.swing.JOptionPane.showConfirmDialog(
+                this,
+                "Are you sure you want to logout?",
+                "Logout",
+                javax.swing.JOptionPane.YES_NO_OPTION
+        );
+
+        if (confirm == javax.swing.JOptionPane.YES_OPTION) {
+
+            this.dispose();
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
     private void loadTable() {
         try {
             java.sql.Connection conn = java.sql.DriverManager.getConnection(
