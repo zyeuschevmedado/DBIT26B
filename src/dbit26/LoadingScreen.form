@@ -37,7 +37,7 @@
         <Property name="useNullLayout" type="boolean" value="false"/>
       </Layout>
     </Container>
-    <Component class="javax.swing.JLabel" name="jLabel1">
+    <Component class="javax.swing.JLabel" name="ld">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Showcard Gothic" size="48" style="1"/>
@@ -79,7 +79,7 @@
     <Component class="javax.swing.JLabel" name="jLabel2">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/login_it26b/0c667f05d3f74d182d2d3577652381c8.gif"/>
+          <Image iconType="3" name="/dbit26/0c667f05d3f74d182d2d3577652381c8.gif"/>
         </Property>
       </Properties>
       <Constraints>
