@@ -15,6 +15,10 @@ import javax.swing.JOptionPane;
  */
 public class LoginForm extends javax.swing.JFrame {
 
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(LoginForm.class.getName());
+
+    boolean isLoggedIn = false;
+
     /**
      * Creates new form LoginForm
      */
@@ -187,22 +191,21 @@ public class LoginForm extends javax.swing.JFrame {
         DashBoard dash = new DashBoard();
         Connection conn = (Connection) DBConnection.getConnection();
 
+
         try {
 
             String sql = "SELECT * FROM users WHERE email=? AND password=?";
             PreparedStatement pst = conn.prepareStatement(sql);
 
-            String email = EM.getText();
+            String emaill = EM.getText();
             String pass = new String(ps.getPassword());
 
-            pst.setString(1, email);
+            pst.setString(1, emaill);
             pst.setString(2, pass);
 
             ResultSet rs = pst.executeQuery();
 
             if (rs.next()) {
-
-                int userId = rs.getInt("id");
 
                 int confirm = JOptionPane.showConfirmDialog(
                         null,
@@ -212,13 +215,6 @@ public class LoginForm extends javax.swing.JFrame {
                 );
 
                 if (confirm == JOptionPane.YES_OPTION) {
-
-                    String logSql = "INSERT INTO login_logs(user_id) VALUES (?)";
-                    PreparedStatement logPst = conn.prepareStatement(logSql);
-                    logPst.setInt(1, userId);
-                    logPst.executeUpdate();
-                    logPst.close();
-
                     dash.setVisible(true);
                     dispose();
                 }
