@@ -4,6 +4,8 @@
  */
 package dbit26;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * GIT_AUTHOR_DATE="2026-04-14 09:56:00" \ GIT_COMMITTER_DATE="2026-04-14
@@ -258,7 +260,16 @@ public class RegisterForm extends javax.swing.JFrame {
     }//GEN-LAST:event_regActionPerformed
 
     private void exitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitActionPerformed
-        // TODO add your handling code here:
+        int confirm = JOptionPane.showConfirmDialog(
+                this,
+                "Are you sure you want to exit?",
+                "Exit",
+                javax.swing.JOptionPane.YES_NO_OPTION
+        );
+
+        if (confirm == javax.swing.JOptionPane.YES_OPTION) {
+            System.exit(0);
+        }
     }//GEN-LAST:event_exitActionPerformed
 
     /**
