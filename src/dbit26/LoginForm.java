@@ -121,6 +121,7 @@ public class LoginForm extends javax.swing.JFrame {
 
         jButton3.setFont(new java.awt.Font("Serif", 0, 14)); // NOI18N
         jButton3.setText("Exit");
+        jButton3.addActionListener(this::jButton3ActionPerformed);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -191,7 +192,6 @@ public class LoginForm extends javax.swing.JFrame {
         DashBoard dash = new DashBoard();
         Connection conn = (Connection) DBConnection.getConnection();
 
-
         try {
 
             String sql = "SELECT * FROM users WHERE email=? AND password=?";
@@ -228,6 +228,19 @@ public class LoginForm extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_jbtlogActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        int confirm = JOptionPane.showConfirmDialog(
+                this,
+                "Are you sure you want to exit?",
+                "Exit",
+                javax.swing.JOptionPane.YES_NO_OPTION
+        );
+
+        if (confirm == javax.swing.JOptionPane.YES_OPTION) {
+            System.exit(0);
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
