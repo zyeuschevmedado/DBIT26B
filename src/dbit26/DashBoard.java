@@ -190,7 +190,7 @@ public class DashBoard extends javax.swing.JFrame {
                     .addComponent(reg)
                     .addComponent(Edit)
                     .addComponent(del))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
